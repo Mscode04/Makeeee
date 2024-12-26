@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makeee</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #A5D7E8;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #19376D;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #576CBC, 0 0 40px #0B2447;
+        }
+
+        h1 {
+            color: #A5D7E8;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        input,
+        select,
+        button {
+            font-size: 16px;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #576CBC;
+            background: #D0E0F0;
+            /* Light background color for input fields */
+            color: #333;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        input {
+            width: 100%;
+        }
+
+        button {
+            background: #A5D7E8;
+            /* Lighter color for buttons */
+            color: #19376D;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #B8E0D8;
+            /* Light hover effect */
+        }
+
+        .resolutions {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .manual-resolutions {
+            display: none;
+        }
+
+        .resolution-box {
+            margin: 10px 0;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #A5D7E8;
+        }
+        footer {
+            color: #A5D7E8;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+    
+        .about-box {
+            background-color: #19376D; /* Light background for the content */
+            border: 1px solid #576CBC; /* Border to match the input fields */
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Soft shadow for the content box */
+            border-radius: 8px; /* Rounded corners for the box */
+        }
+    
+        .about-box h3 {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #B8E0D8; /* Darker text color for the title */
+        }
+    
+        .about-box p {
+            font-size: 16px;
+            color: #D0E0F0; /* Darker text for the paragraph */
+            margin-bottom: 20px;
+            line-height: 1.6; /* Increased line height for better readability */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Make Your Resolutions</h1>
+        <div class="mb-3">
+            <label for="userName" class="form-label">Your Name:</label>
+            <input type="text" id="userName" class="form-control" placeholder="Enter your name">
+        </div>
+
+        <div class="resolutions">
+            <button class="btn btn-primary" onclick="showAIResolutions()">Generate Resolutions from AI</button>
+            <button class="btn btn-secondary" onclick="showManualResolutions()">Add Resolutions Manually</button>
+        </div>
+
+        <div id="aiResolutions" class="ai-resolutions mt-3" style="display: none;">
+            <div class="mb-3">
+                <label for="resolutionCount" class="form-label">How many resolutions?</label>
+                <select id="resolutionCount" class="form-select">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                 
+                </select>
+            </div>
+            <button class="btn btn-success" onclick="redirectToProfileAI()">Go to Profile</button>
+        </div>
+
+        <div id="manualResolutions" class="manual-resolutions mt-3">
+            <div id="resolutionBoxes">
+                <input type="text" class="resolution-box form-control" placeholder="Enter your resolution">
+                <input type="text" class="resolution-box form-control" placeholder="Enter your resolution">
+                <input type="text" class="resolution-box form-control" placeholder="Enter your resolution">
+            </div>
+            <button class="btn btn-warning" onclick="addResolutionBox()">Add More</button>
+            <button class="btn btn-success" onclick="redirectToProfileManual()">Go to Profile</button>
+        </div>
+    </div>
+
+
+
+    <footer>
+        <div class="about-box">
+            <h3>About This Project</h3>
+            <hr>
+            <p>Welcome to the New Year Resolution Generator! Here, you can generate your resolutions with the help of AI or create them manually based on your goals. Once you’re done, simply download your resolutions to keep them handy and stay motivated throughout the year!</p>
+        </div>
+    </footer>
+
+      
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        const resolutions =  [
+        "Exercise regularly",
+        "Practice mindfulness daily", "Learn how to manage stress", "Start a new fitness challenge", 
+        "Read a book every month", "Explore a new hobby", "Take a daily walk outside", 
+        "Unplug from technology once a week", "Start meal prepping every week", "Learn how to meditate", 
+        "Join a community group", "Spend time in nature regularly", "Try a new form of exercise", 
+        "Get involved in volunteering", "Commit to a year of no fast food", "Improve posture", 
+        "Avoid negative self-talk", "Take up yoga or pilates", "Learn to dance", "Travel somewhere new every year", 
+        "Create a vision board", "Reduce screen time before bed", "Try a new recipe every week", 
+        "Give up a bad habit for 30 days", "Reduce waste and live sustainably", "Practice gratitude every night", 
+        "Take a break from social media for a month", "Create an emergency preparedness plan", 
+        "Take more photos and document memories", "Attend a self-improvement seminar", "Cut down on sugar", 
+        "Reduce caffeine intake", "Strengthen relationships with people who inspire you", "Increase reading time", 
+        "Write a daily journal", "Improve listening skills", "Be more punctual", "Join a public speaking course", 
+        "Improve mental health through therapy or self-help", "Commit to a week of no complaints", 
+        "Start a daily affirmations practice", "Commit to being more positive", "Learn a new instrument", 
+        "Set time aside for creative expression", "Commit to a daily self-care routine", "Start a gratitude journal", 
+        "Take more vacations", "Complete a personal project", "Engage in random acts of kindness", 
+        "Explore a new sport", "Start a family tradition", "Learn to code", "Set a goal for passive income", 
+        "Learn how to budget", "Pay off all credit card debt", "Invest in a retirement fund", "Grow your savings",
+        "Start a financial education course", "Learn about investment opportunities", "Buy a home", 
+        "Explore new career opportunities", "Create a personal growth roadmap", "Start an art collection", 
+        "Work on emotional intelligence", "Start an online store", "Develop a fitness app", "Learn to negotiate", 
+        "Improve your self-image", "Take part in charity events", "Develop a morning routine", 
+        "Strengthen communication with family", "Learn a new language through immersion", "Buy a bicycle", 
+        "Join a book club", "Host family dinners", "Create a DIY project at home", "Start a podcast", 
+        "Practice patience with yourself", "Get involved in local politics", "Take on a leadership role", 
+        "Start a YouTube channel", "Commit to zero waste", "Stop procrastinating on your dreams", 
+        "Learn how to prioritize better", "Try something new every month", "Become more financially literate", 
+        "Minimize negative self-talk", "Start a business plan", "Complete a 30-day fitness challenge", 
+        "Practice better work-life balance", "Declutter your digital devices", "Organize your wardrobe", 
+        "Create a vision statement for your life", "Start a podcast about personal growth", 
+        "Make your health a priority", "Stop comparing yourself to others", "Plan your week ahead on Sundays", 
+        "Be more patient with others", "Learn time management strategies", "Change your morning routine", 
+        "Create an inspiring workspace", "Make a list of what you’re grateful for each day", "Improve your sleep hygiene", 
+        "Build more meaningful connections", "Reduce your carbon footprint", "Write a personal mission statement", 
+        "Declutter your home", "Stop multitasking", "Get involved in a local charity", "Start a journal of your thoughts", 
+        "Challenge yourself with new ideas", "Start practicing a new mindfulness technique", "Prioritize self-compassion", 
+        "Be more supportive of others", "Spend more time volunteering", "Create a fitness schedule", 
+        "Commit to living a healthier lifestyle", "Strengthen your work ethic", "Start a sustainable habit", 
+        "Limit screen time at night", "Start doing something creative every day", "Become more intentional with your time", 
+        "Learn how to express yourself creatively", "Create a personal development blog", "Find a hobby to share with others", 
+        "Take time off social media to clear your mind", "Create a financial budget for yourself", 
+        "Develop a personal growth journal", "Focus on improving your memory", "Enhance your reading skills", 
+        "Build new habits that support your goals", "Find a new workout routine", "Create a personal vision statement", 
+        "Learn a new technical skill", "Explore the outdoors more frequently", "Expand your comfort zone", 
+        "Learn to delegate better", "Join a mastermind group", "Set short-term goals that align with long-term vision", 
+        "Learn about sustainability", "Commit to living a more intentional life", "Learn how to say no", 
+        "Find a new creative outlet", "Challenge your limits", "Host a community event", "Do something out of your comfort zone", 
+        "Take more mental health days", "Commit to consistent self-reflection", "Start a creative project", 
+        "Improve public speaking skills", "Participate in charity runs", "Be more mindful with your money", 
+        "Spend more time connecting with family", "Create a more sustainable lifestyle", "Learn to cook healthy meals", 
+        "Take care of your physical and mental health", "Work on overcoming self-doubt", "Create a vision for your future", 
+        "Start a wellness routine", "Practice gratitude more regularly", "Invest in relationships with close friends", 
+        "Make time for mindfulness practices", "Read one new book each month", "Commit to learning something new each month", 
+        "Set long-term personal goals", "Take up journaling as a habit", "Stop overthinking decisions", "Increase your work productivity", 
+        "Commit to finding joy in everyday moments", "Take risks and be bold", "Start a fitness challenge", 
+        "Commit to reading at least 12 books a year", "Build and maintain a positive mindset", 
+        "Practice more kindness towards others", "Create more intentional moments with loved ones", "Invest time in your personal growth", 
+        "Work towards your own happiness", "Develop a consistent morning routine", "Commit to learning a new language", 
+        "Take time for relaxation", "Learn about energy healing", "Stay curious about the world around you"
+      ];
+
+        function showAIResolutions() {
+            document.getElementById("aiResolutions").style.display = "block";
+            document.getElementById("manualResolutions").style.display = "none";
+        }
+
+        function showManualResolutions() {
+            document.getElementById("manualResolutions").style.display = "block";
+            document.getElementById("aiResolutions").style.display = "none";
+        }
+
+        function redirectToProfileAI() {
+            const userName = document.getElementById("userName").value.trim();
+            const count = parseInt(document.getElementById("resolutionCount").value);
+            const selectedResolutions = [];
+
+            if (!userName) {
+                alert("Please enter your name.");
+                return;
+            }
+
+            while (selectedResolutions.length < count) {
+                const randomIndex = Math.floor(Math.random() * resolutions.length);
+                const resolution = resolutions[randomIndex];
+                if (!selectedResolutions.includes(resolution)) {
+                    selectedResolutions.push(resolution);
+                }
+            }
+
+            const resolutionsQuery = encodeURIComponent(selectedResolutions.join(","));
+            window.location.href = `profile.html?name=${encodeURIComponent(userName)}&resolutions=${resolutionsQuery}`;
+        }
+
+        function addResolutionBox() {
+            const resolutionBoxes = document.getElementById("resolutionBoxes");
+            const input = document.createElement("input");
+            input.type = "text";
+            input.className = "resolution-box form-control";
+            input.placeholder = "Enter your resolution";
+            resolutionBoxes.appendChild(input);
+        }
+
+        function redirectToProfileAI() {
+            const userName = document.getElementById("userName").value.trim();
+            const count = parseInt(document.getElementById("resolutionCount").value);
+            const selectedResolutions = [];
+        
+            if (!userName) {
+                alert("Please enter your name.");
+                return;
+            }
+        
+            // Select random resolutions
+            while (selectedResolutions.length < count) {
+                const randomIndex = Math.floor(Math.random() * resolutions.length);
+                const resolution = resolutions[randomIndex];
+                if (!selectedResolutions.includes(resolution)) {
+                    selectedResolutions.push(resolution);
+                }
+            }
+        
+            // Redirect to profile with the resolutions and user name as query parameters
+            const resolutionsQuery = encodeURIComponent(selectedResolutions.join(", "));
+            window.location.href = `profile.html?name=${encodeURIComponent(userName)}&resolutions=${resolutionsQuery}`;
+        }
+        
+        function redirectToProfileManual() {
+            const userName = document.getElementById("userName").value.trim();
+            const resolutionInputs = document.querySelectorAll(".resolution-box");
+            const resolutions = [];
+        
+            if (!userName) {
+                alert("Please enter your name.");
+                return;
+            }
+        
+            resolutionInputs.forEach(input => {
+                const resolution = input.value.trim();
+                if (resolution) {
+                    resolutions.push(resolution);
+                }
+            });
+        
+            if (resolutions.length === 0) {
+                alert("Please enter at least one resolution.");
+                return;
+            }
+        
+            // Encoding resolutions correctly
+            const resolutionsQuery = encodeURIComponent(resolutions.join(","));
+            // Pass name and resolutions as query parameters
+            window.location.href = `profile.html?name=${encodeURIComponent(userName)}&resolutions=${resolutionsQuery}`;
+        }
+    </script>
+</body>
+
+</html>

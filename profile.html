@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #F6F4F0;
+      color: #202f41;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #4DA1A9;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #202f41;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .quote {
+      font-size: 12px;
+      font-style: italic;
+      text-align: center;
+      margin: 20px 0;
+      color: 2E5077;
+    }
+    .quote::before,
+    .quote::after {
+      content: '"';
+      font-size: 30px;
+      color: #79D7BE;
+    }
+    .quote::before {
+      left: -60px;
+      top: -10px;
+    }
+    .quote::after {
+      right: -60px;
+      top: -10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+      word-wrap: break-word;
+    }
+    th {
+      background-color: #2E5077;
+      color: #F6F4F0;
+    }
+    tr:nth-child(even) {
+      background-color: #79d7be73;
+    }
+    .download-btn {
+      display: block;
+      width: 200px;
+      margin: 20px auto;
+      padding: 10px;
+      text-align: center;
+      background-color: #79D7BE;
+      color: #2E5077;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .download-btn:hover {
+      background-color: #2E5077;
+      color: #79D7BE;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="contentToDownload">
+    <h1>Dear, <span id="userName">Me</span>!</h1>
+    <div class="quote">
+      The future belongs to those who believe in the beauty of their dreams. Let this year be the one where we turn our resolutions into reality!
+    </div>
+    <table id="resolutionTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Resolution</th>
+          <th>Make as True</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button class="download-btn" onclick="downloadAsHTML()">Download</button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const userName = params.get("name");
+    const resolutions = params.get("resolutions") ? params.get("resolutions").split(",") : [];
+
+    // If username is not provided, default to "Me"
+    const displayedName = userName || "Me";
+    document.getElementById("userName").textContent = displayedName;
+
+    const resolutionTable = document.getElementById("resolutionTable").getElementsByTagName('tbody')[0];
+    resolutions.forEach((resolution, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${resolution}</td>
+        <td></td>
+      `;
+      resolutionTable.appendChild(row);
+    });
+
+    // Function to download the page as an HTML file
+    function downloadAsHTML() {
+      const content = document.getElementById("contentToDownload").outerHTML;
+      const html = document.documentElement.outerHTML; // Get the entire HTML content, including styles
+      const blob = new Blob([html], { type: "text/html" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "profile_page.html";
+      link.click();
+    }
+  </script>
+</body>
+</html>
